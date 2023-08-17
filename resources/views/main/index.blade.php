@@ -235,7 +235,7 @@
                                     </div>
                                     <div class="img-upload mt-4">
                                         <label for="image_upload" id="image_upload_btn">Choose Image</label>
-                                        <input type="file" name="image_upload" id="image_upload" class="form-control"  accept="image/*" value="{{ old('image') }}" disabled> 
+                                        <input type="file" name="image_upload" id="image_upload" class="form-control"  accept="image/jpg,image/jpeg" value="{{ old('image') }}" disabled> 
                                         <input type="hidden" name="image" id="image">
                                     </div>
                                     <div class="img-upload-instructions mt-4 " style="display:none;">
@@ -295,6 +295,8 @@
 
     <script>
 
+        $('.submit').attr('disabled',true);
+
 
         const apiKey = "dHCTsJXFN8io6XMbVTUaL54N"; 
         const removeBgEndpoint = "https://api.remove.bg/v1.0/removebg"; 
@@ -353,25 +355,6 @@
         }
 
 
-        function resizeImage(imageDataUrl, targetWidth, targetHeight) {
-            var img = new Image();
-            img.src = imageDataUrl;
-
-            var canvas = document.createElement("canvas");
-            var ctx = canvas.getContext("2d");
-
-            var aspectRatio = img.width / img.height;
-            var width = targetWidth;
-            var height = targetHeight || targetWidth / aspectRatio;
-
-            canvas.width = width;
-            canvas.height = height;
-
-            ctx.drawImage(img, 0, 0, width, height);
-
-            return canvas.toDataURL("image/jpeg");
-        }
-
         function detectFaces(resizedImage) {
 
             $('.face_p_text').removeClass('d-none');
@@ -391,14 +374,8 @@
             var blobImage = new Blob([ab], { type: mimeString });
 
 
-            // var returnFaceAttributes = {
-            //     hairRectangle: true,
-            //     shoulderRectangle: true
-            // };
-            // var returnFaceAttributes = "headPose,glasses";
-
             $.ajax({
-                url: endpoint,
+                url: `${endpoint}?returnFaceAttributes=headPose,blur&returnFaceLandmarks=true`,
                
                 type: "POST",
                 beforeSend: function (xhr) {
@@ -407,47 +384,69 @@
                 data:blobImage,
                 contentType: "application/octet-stream",
                 processData: false,
-                // Specify the returnFaceAttributes
-                // data: JSON.stringify({ returnFaceAttributes: returnFaceAttributes }),
                 success: function (data) {
                     console.log(data);
                     if (data.length == 1) {
+
+                        $('.face_p_text').html(`Face detected <i class="fa fa-check text-success"></i>`);
+
                         var faceRectangle = data[0].faceRectangle;
-                        var hairRectangle = data[0].hairRectangle;
-                        console.log(hairRectangle);
                         var originalImage = document.getElementById("preview-image");
                         originalImage.src = resizedImage; 
 
-                        var canvas = document.createElement('canvas');
-                        var ctx = canvas.getContext('2d');
-                        // canvas.width = faceRectangle.width;
-                        // canvas.height = faceRectangle.height;
+                        var faceAttributes = data[0].faceAttributes;
+                        var headPose = faceAttributes.headPose;
 
-                        // var croppedFaceImage = new Image();
-                        // croppedFaceImage.src = resizedImage;
-                        // croppedFaceImage.onload = function () {
-                        //     ctx.drawImage(croppedFaceImage, faceRectangle.left, faceRectangle.top, faceRectangle.width, faceRectangle.height, 0, 0, faceRectangle.width, faceRectangle.height);
-                        //     originalImage.src = canvas.toDataURL("image/jpeg"); 
-                        // };
+                        var yawAngle = headPose.yaw;
+                        var yawThreshold = 15; 
 
-                                       
-                        var passportWidth = 2 * faceRectangle.width; 
-                        var passportHeight = 2 * faceRectangle.height; 
-                        canvas.width = passportWidth;
-                        canvas.height = passportHeight;
-
-                        var croppedFaceImage = new Image();
-                        croppedFaceImage.src = resizedImage;
-                        croppedFaceImage.onload = function () {
+                        if (Math.abs(yawAngle) <= yawThreshold) {
                             
-                            ctx.drawImage(croppedFaceImage, faceRectangle.left, faceRectangle.top, faceRectangle.width, faceRectangle.height, 0, 0, passportWidth, passportHeight);
-                            originalImage.src = canvas.toDataURL("image/jpeg"); 
-                        };
-                        
+                            console.log('Face is looking directly at the camera.');
+                            
+                            // Crop and ResizeImage
+                            var canvas = document.createElement('canvas');
+                            var ctx = canvas.getContext('2d');
 
-                        $('.face_p_text').html(`Face detected <i class="fa fa-check text-success"></i>`);
-                        
-                        // ... (rest of the code)
+                            var headAndShouldersWidth = faceRectangle.width * 2;
+                            var headAndShouldersHeight = faceRectangle.height * 3;
+
+                            var headAndShouldersLeft = Math.max(faceRectangle.left - faceRectangle.width / 2, 0);
+                            var headAndShouldersTop = Math.max(faceRectangle.top - faceRectangle.height, 0);
+
+                            canvas.width = headAndShouldersWidth;
+                            canvas.height = headAndShouldersHeight;
+
+                            ctx.drawImage(originalImage, headAndShouldersLeft, headAndShouldersTop, headAndShouldersWidth, headAndShouldersHeight, 0, 0, canvas.width, canvas.height);
+
+                            var desiredWidth = 2 * 300;
+                            var desiredHeight = 2 * 300;
+
+                            var resizedCanvas = document.createElement('canvas');
+                            var resizedCtx = resizedCanvas.getContext('2d');
+                            resizedCanvas.width = desiredWidth;
+                            resizedCanvas.height = desiredHeight;
+
+                            resizedCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, resizedCanvas.width, resizedCanvas.height);
+
+                            var resizedImageData = resizedCanvas.toDataURL('image/jpeg');
+
+                            originalImage.src = resizedImageData;
+                            
+                            $('#image_upload_btn').css({'opacity':1,'cursor':'pointer'});
+                            $('#image_upload').removeAttr('disabled');
+                            $('.submit').removeAttr('disabled');
+
+                        } else {
+                            
+                            console.log('Face is not looking directly at the camera.');
+                            $('.face_p_text').html(`Face is not looking directly at the camera. <i class="fa fa-close text-danger"></i>`);
+                            $('#image_upload_btn').css({'opacity':1,'cursor':'pointer'});
+                            $('#image_upload').removeAttr('disabled');
+                            $('.submit').removeAttr('disabled');
+                        }
+
+
                     }
                     else if (data.length > 1) {
                         console.log('Multiple faces detected.');
