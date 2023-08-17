@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Country;
+use App\Models\DocumentType;
 
 class AdminController extends Controller
 {
@@ -13,6 +15,8 @@ class AdminController extends Controller
 
     public function index() {
         
-        return view('Admin.index');
+        $countries = Country::all();
+
+        return view('Admin.index',compact('countries'));
     }
 }
