@@ -306,7 +306,7 @@
         var image = document.getElementById('sample_image');
         var cropper;
 
-        function removeBg(croppedImage){
+        function removeBg(resizedImageData){
             
             $('.remove_bg_text').removeClass('d-none');
             // $('#image_upload_btn').text('Removing Background...');
@@ -315,10 +315,19 @@
             
             // const image = fileInput.files[0];
 
-            const formData = new FormData();
-            formData.append('image_file', croppedImage);
-            formData.append('size', 'auto');
+            // Convert resizedImageData to Blob
+            var byteCharacters = atob(resizedImageData.split(',')[1]);
+            var byteNumbers = new Array(byteCharacters.length);
+            for (var i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            var byteArray = new Uint8Array(byteNumbers);
+            var blobImage = new Blob([byteArray], { type: 'image/jpeg' });
 
+            const formData = new FormData();
+            formData.append('image_file', blobImage);
+            formData.append('size', 'auto');
+            formData.append('type', 'image/jpeg');
             
 
             fetch(removeBgEndpoint,{
@@ -432,11 +441,12 @@
                             var resizedImageData = resizedCanvas.toDataURL('image/jpeg');
 
                             originalImage.src = resizedImageData;
-
+                            
                             $('#image_upload_btn').css({'opacity':1,'cursor':'pointer'});
                             $('#image_upload').removeAttr('disabled');
                             $('.submit').removeAttr('disabled');
 
+                            removeBg(resizedImageData);
                         } else {
                             
                             console.log('Face is not looking directly at the camera.');
