@@ -375,7 +375,7 @@
 
 
             $.ajax({
-                url: `${endpoint}?returnFaceAttributes=headPose,blur&returnFaceLandmarks=true`,
+                url: `${endpoint}?returnFaceAttributes=headPose&returnFaceLandmarks=true`,
                
                 type: "POST",
                 beforeSend: function (xhr) {
@@ -432,7 +432,7 @@
                             var resizedImageData = resizedCanvas.toDataURL('image/jpeg');
 
                             originalImage.src = resizedImageData;
-                            
+
                             $('#image_upload_btn').css({'opacity':1,'cursor':'pointer'});
                             $('#image_upload').removeAttr('disabled');
                             $('.submit').removeAttr('disabled');
