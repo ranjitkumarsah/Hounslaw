@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <!-- Form  -->
-        <form class="form" id="" method="POST" action="{{route('details')}}" enctype="multipart/form-data">
+        <form class="form" id="document_update">
             @csrf
             <div class="card form-submit-card mt-4">
                 <div class="row card-body">
@@ -29,7 +29,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="document_type">Select Document</label><span class="text-danger">*</span>
-                            <input type="hidden" id="input_doc_type_val" value="{{old('document_type')}}">
+                            <input type="hidden" id="doc_id" value="">
                             <select name="document_type" id="document_type" class="form-control document_type @error('document_type') is-invalid @enderror">
                                 <option value=""></option>
                                 
@@ -45,8 +45,8 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label for="document_width">Document width (in pixels)</label><span class="text-danger">*</span>
-                            <input type="text" name="document_width" id="document_width" class="form-control @error('name') is-invalid @enderror"  value="{{ old('name') }}" placeholder="Enter name">
+                            <label for="document_width">Document width (in cm)</label><span class="text-danger">*</span>
+                            <input type="text" name="document_width" id="document_width" class="form-control @error('name') is-invalid @enderror"  value="{{ old('name') }}" placeholder="Enter width">
                             @error('document_width')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -56,8 +56,8 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label for="document_height">Document height (in pixels)</label><span class="text-danger">*</span>
-                            <input type="text" name="document_height" id="document_height" class="form-control @error('name') is-invalid @enderror"  value="{{ old('name') }}" placeholder="Enter name">
+                            <label for="document_height">Document height (in cm)</label><span class="text-danger">*</span>
+                            <input type="text" name="document_height" id="document_height" class="form-control @error('name') is-invalid @enderror"  value="{{ old('name') }}" placeholder="Enter height">
                             @error('document_height')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -76,4 +76,93 @@
         </form>
     </div>
 </div>
+    <script>
+         $(document).ready(function() {
+           
+            $('#document_height, #document_width').on('input', function() {
+                var inputValue = $(this).val();
+                var sanitizedValue = inputValue.replace(/[^\d.]/g, '');
+                sanitizedValue = sanitizedValue.replace(/(\..*)\./g, '$1');
+
+                $(this).val(sanitizedValue);
+            });
+
+            $('#document_height, #document_width').on('paste', function(e) {
+                e.preventDefault();
+                var currentVal = $(this).val();
+                var pastedText = (e.originalEvent || e).clipboardData.getData('text/plain');
+
+                var sanitizedPastedText = pastedText.replace(/[^\d.]/g, '');
+                sanitizedPastedText = sanitizedPastedText.replace(/(\..*)\./g, '$1');
+
+                $(this).val(currentVal + sanitizedPastedText);
+            });
+
+
+            $(document).on('change','#document_type',function(e){
+                e.preventDefault();
+                var code = $(this).val();
+
+
+                $.ajax({
+                    url: 'admin/getDocumentSize/'+code, 
+                    type: 'GET',
+                    success: function(response) {
+                        if(response.success) {
+                            
+                            var id = response.data.id;
+                            var width = response.data.width;
+                            var height = response.data.height;
+
+                            $('#doc_id').val(id);
+                            $('#document_width').val(width);
+                            $('#document_height').val(height);
+
+                        } else {
+                            console.log(response.message);
+                        }
+                        
+                        
+                    
+                    },
+                    error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    }
+                });
+            });
+
+
+            $("#document_update").submit(function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                var id = $('#doc_id').val();
+
+                if(id) {
+                    $.ajax({
+                        type: "POST",
+                        url: 'admin/documentSizeUpdate/'+id, 
+                        data: formData,
+                        success: function(response) {
+                            toastr.success('Document Size Updated', 'Success');
+                            setInterval(location.reload(), 3000);
+                        },
+                        error: function(xhr, status, error) {
+                            if (xhr.status === 422) {
+                                // Show error Toastr message
+                                toastr.error(xhr.responseJSON.error, 'Validation Error');
+                            } else {
+                                toastr.error('An error occurred: ' + error, 'Error');
+                            }
+                        }
+                    });
+                } else {
+                    toastr.error('Please select Document', 'Error');
+                }
+                
+            });
+        });
+
+
+
+    </script>
 @endsection

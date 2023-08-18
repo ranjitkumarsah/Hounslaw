@@ -17,5 +17,7 @@ class DocumentType extends Model
         'doc_code',
         'doc_type',
         'doc_name',
+        'width',
+        'height',
     ];
 }

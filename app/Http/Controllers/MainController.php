@@ -100,7 +100,26 @@ class MainController extends Controller
         
     }
 
+    public function documentSize($code) {
 
+        $data = DocumentType::where('doc_code',$code)->first();
+
+        if($data) {
+            return response()->json([
+                'success' => true,
+                'data' => $data,
+                'code' => 200,
+                'message'=> 'Data found',
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'code' => 404,
+                'message'=> 'Data not found',
+
+            ]);
+        }
+    }
     
     public function saveImageSession(Request $request) {
         

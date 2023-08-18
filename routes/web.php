@@ -31,12 +31,17 @@ Route::get('/thank-you', [MainController::class, 'thankYou'])->name('thank-you')
 Route::get('getDocTypes/{code}',[MainController::class,'getDocTypes'])->name('getDocTypes');
 
 Route::post('/save-img-session',[MainController::class,'saveImageSession']);
+Route::get('getDocumentSize/{code}',[MainController::class,'documentSize']);
 
 
 Auth::routes(['verify' => true]);
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [AdminController::class,'index'])->name('admin.home');
+    Route::get('getDocumentSize/{code}',[AdminController::class,'documentSize'])->name('documentSize');
+
+    Route::post('documentSizeUpdate/{id}',[AdminController::class,'documentSizeUpdate'])->name('documentSizeUpdate');
+
 });
 
 

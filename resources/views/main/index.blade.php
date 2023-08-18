@@ -112,13 +112,13 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="country">Select Country</label><span class="text-danger">*</span>
-                                    <select name="country" id="country" class="form-control country @error('country') is-invalid @enderror">
+                                    <select name="country" id="country" class="form-control country @error('country') is-invalid @enderror" required>
                                         <option></option>
                                         @foreach($countries as $country)
                                             <option value="{{$country->code}}" @if(old('country') == $country->code) selected @endif>{{$country->name}}</option>
                                         @endforeach
                                     </select>
-                                    <input type="hidden" name="country_text" id="country_text">
+                                    <input type="hidden" name="country_text" id="country_text" required>
                                     @error('country')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -130,12 +130,14 @@
                                 <div class="form-group">
                                     <label for="document_type">Select Document</label><span class="text-danger">*</span>
                                     <input type="hidden" id="input_doc_type_val" value="{{old('document_type')}}">
-                                    <select name="document_type" id="document_type" class="form-control document_type @error('document_type') is-invalid @enderror">
+                                    <select name="document_type" id="document_type" class="form-control document_type @error('document_type') is-invalid @enderror" required>
                                         <option value=""></option>
                                         
                                        
                                     </select>
-                                    <input type="hidden" name="document_type_text" id="document_type_text">
+                                    <input type="hidden" name="document_width" id="document_width">
+                                    <input type="hidden" name="document_height" id="document_height">
+                                    <input type="hidden" name="document_type_text" id="document_type_text" required>
                                     @error('document_type')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -146,7 +148,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="name">Name</label><span class="text-danger">*</span>
-                                   <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror"  value="{{ old('name') }}" placeholder="Enter name">
+                                   <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror"  value="{{ old('name') }}" placeholder="Enter name" required>
                                    @error('name')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -157,7 +159,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="email">Email</label><span class="text-danger">*</span>
-                                   <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror"  value="{{ old('email') }}" placeholder="Enter email">
+                                   <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror"  value="{{ old('email') }}" placeholder="Enter email" required>
                                    @error('email')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -168,7 +170,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="address">Address</label><span class="text-danger">*</span>
-                                   <textarea name="address" class="form-control @error('address') is-invalid @enderror" id="address" placeholder="Address">{{ old('address') }}</textarea>
+                                   <textarea name="address" class="form-control @error('address') is-invalid @enderror" id="address" placeholder="Address" required>{{ old('address') }}</textarea>
                                    @error('address')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -179,7 +181,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="city">Town/City</label><span class="text-danger">*</span>
-                                    <input type="text" name="city" id="city" class="form-control @error('city') is-invalid @enderror" value="{{ old('city') }}" placeholder="Enter city">
+                                    <input type="text" name="city" id="city" class="form-control @error('city') is-invalid @enderror" value="{{ old('city') }}" placeholder="Enter city" required>
                                     @error('city')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -190,7 +192,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="post_code">Postcode</label><span class="text-danger">*</span>
-                                    <input type="text" name="post_code" id="post_code" class="form-control @error('post_code') is-invalid @enderror"  value="{{ old('post_code') }}" placeholder="Enter postal code">
+                                    <input type="text" name="post_code" id="post_code" class="form-control @error('post_code') is-invalid @enderror"  value="{{ old('post_code') }}" placeholder="Enter postal code" required>
                                     @error('post_code')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -209,7 +211,7 @@
                                     <h4 class="text-center"> Upload Photo</h4>
                                     <div class="card text-center upload-image-preview">
                                         <div class="card-body @error('image') is-invalid @enderror">
-                                           <img src="{{asset('public/images/blankimg.png')}}" alt="blankImg" class="preview-image w-100" id="preview-image" srcset="" >
+                                           <img src="{{asset('public/images/blankimg.png')}}" alt="blankImg" class="preview-image w-100" id="preview-image" srcset="" required>
                                         </div>
                                     </div>
                                     @error('image')
@@ -219,10 +221,7 @@
                                     @enderror
                                     <div class="row mt-4">
                                         <div class="col-sm-12 text-center proccessing-text">
-                                            <span class="text-secondary face_p_text d-none">Detecting face
-                                                <div class="spinner-border text-info" role="status">
-                                                    <span class="visually-hidden">Loading...</span>
-                                                </div>
+                                            <span class="text-secondary face_p_text d-none">
                                                 
                                             </span><br>
                                             <span class="text-secondary remove_bg_text d-none">Removing Background
@@ -260,7 +259,7 @@
             </div>
 
         </form>
-        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <!-- <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             
  
             <div class="modal-dialog modal-lg" role="document">
@@ -290,7 +289,7 @@
                 </div>
             </div>
                 
-        </div>
+        </div> -->
     </div>
 
     <script>
@@ -298,7 +297,8 @@
         $('.submit').attr('disabled',true);
 
 
-        const apiKey = "dHCTsJXFN8io6XMbVTUaL54N"; 
+        // const apiKey = "dHCTsJXFN8io6XMbVTUaL54N"; 
+        const apiKey = "uf8s2si1VNiwj5ZeegbiiiXB";
         const removeBgEndpoint = "https://api.remove.bg/v1.0/removebg"; 
 
         var originalImage = null;
@@ -366,7 +366,6 @@
 
         function detectFaces(resizedImage) {
 
-            $('.face_p_text').removeClass('d-none');
 
             var subscriptionKey = "30c22bd1c4644d9f886ab0ffff7a717f";
             var region = "eastus";
@@ -382,106 +381,173 @@
             }
             var blobImage = new Blob([ab], { type: mimeString });
 
+            var doc_width = $('#document_width').val();
+            var doc_height = $('#document_height').val();
 
-            $.ajax({
-                url: `${endpoint}?returnFaceAttributes=headPose&returnFaceLandmarks=true`,
-               
-                type: "POST",
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
-                },
-                data:blobImage,
-                contentType: "application/octet-stream",
-                processData: false,
-                success: function (data) {
-                    console.log(data);
-                    if (data.length == 1) {
+            if(doc_width && doc_height) {
+                $('.face_p_text').html(`Detecting face
+                    <div class="spinner-border text-info" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                    </div>`
+                );
+                $('.face_p_text').removeClass('d-none');
 
-                        $('.face_p_text').html(`Face detected <i class="fa fa-check text-success"></i>`);
+                $.ajax({
+                    url: `${endpoint}?returnFaceAttributes=headPose&returnFaceLandmarks=true`,
+                
+                    type: "POST",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
+                    },
+                    data:blobImage,
+                    contentType: "application/octet-stream",
+                    processData: false,
+                    success: function (data) {
+                        console.log(data);
+                        if (data.length == 1) {
 
-                        var faceRectangle = data[0].faceRectangle;
-                        var originalImage = document.getElementById("preview-image");
-                        originalImage.src = resizedImage; 
+                            var faceRectangle = data[0].faceRectangle;
+                            var originalImage = document.getElementById("preview-image");
+                            originalImage.src = resizedImage; 
 
-                        var faceAttributes = data[0].faceAttributes;
-                        var headPose = faceAttributes.headPose;
+                            var faceAttributes = data[0].faceAttributes;
+                            var headPose = faceAttributes.headPose;
 
-                        var yawAngle = headPose.yaw;
-                        var yawThreshold = 15; 
+                            var yawAngle = headPose.yaw;
+                            var yawThreshold = 10; 
+                            var pitchThreshold = 7; 
+                            var rollThreshold = 7;
 
-                        if (Math.abs(yawAngle) <= yawThreshold) {
-                            
-                            console.log('Face is looking directly at the camera.');
-                            
-                            // Crop and ResizeImage
-                            var canvas = document.createElement('canvas');
-                            var ctx = canvas.getContext('2d');
+                            if (Math.abs(yawAngle) <= yawThreshold) {
 
-                            var headAndShouldersWidth = faceRectangle.width * 2;
-                            var headAndShouldersHeight = faceRectangle.height * 3;
+                                if (Math.abs(headPose.pitch) <= pitchThreshold && Math.abs(headPose.roll) <= rollThreshold) {
+                                    
+                                    console.log('Face is looking directly at the camera.');
 
-                            var headAndShouldersLeft = Math.max(faceRectangle.left - faceRectangle.width / 2, 0);
-                            var headAndShouldersTop = Math.max(faceRectangle.top - faceRectangle.height, 0);
+                                    var desiredWidthInches = doc_width * 0.3937;
+                                    var desiredHeightInches = doc_height * 0.3937;
 
-                            canvas.width = headAndShouldersWidth;
-                            canvas.height = headAndShouldersHeight;
+                                    // Crop and ResizeImage
+                                    var canvas = document.createElement('canvas');
+                                    var ctx = canvas.getContext('2d');
 
-                            ctx.drawImage(originalImage, headAndShouldersLeft, headAndShouldersTop, headAndShouldersWidth, headAndShouldersHeight, 0, 0, canvas.width, canvas.height);
+                                    var headAndShouldersWidth = faceRectangle.width * 2;
+                                    var headAndShouldersHeight = faceRectangle.height * 3;
 
-                            var desiredWidth = 2 * 300;
-                            var desiredHeight = 2 * 300;
+                                    var headAndShouldersLeft = Math.max(faceRectangle.left - faceRectangle.width / 2, 0);
+                                    var headAndShouldersTop = Math.max(faceRectangle.top - faceRectangle.height, 0);
 
-                            var resizedCanvas = document.createElement('canvas');
-                            var resizedCtx = resizedCanvas.getContext('2d');
-                            resizedCanvas.width = desiredWidth;
-                            resizedCanvas.height = desiredHeight;
+                                    canvas.width = headAndShouldersWidth;
+                                    canvas.height = headAndShouldersHeight;
 
-                            resizedCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, resizedCanvas.width, resizedCanvas.height);
+                                    ctx.drawImage(originalImage, headAndShouldersLeft, headAndShouldersTop, headAndShouldersWidth, headAndShouldersHeight, 0, 0, canvas.width, canvas.height);
 
-                            var resizedImageData = resizedCanvas.toDataURL('image/jpeg');
+                                    var dpi = 300;
+                                    var desiredWidth = Math.round(desiredWidthInches * dpi);
+                                    var desiredHeight = Math.round(desiredHeightInches * dpi);
 
-                            originalImage.src = resizedImageData;
-                            
-                            $('#image_upload_btn').css({'opacity':1,'cursor':'pointer'});
-                            $('#image_upload').removeAttr('disabled');
-                            $('.submit').removeAttr('disabled');
+                                    var resizedCanvas = document.createElement('canvas');
+                                    var resizedCtx = resizedCanvas.getContext('2d');
+                                    resizedCanvas.width = desiredWidth;
+                                    resizedCanvas.height = desiredHeight;
 
-                            removeBg(resizedImageData);
-                        } else {
-                            
-                            console.log('Face is not looking directly at the camera.');
-                            $('.face_p_text').html(`Face is not looking directly at the camera. <i class="fa fa-close text-danger"></i>`);
-                            $('#image_upload_btn').css({'opacity':1,'cursor':'pointer'});
-                            $('#image_upload').removeAttr('disabled');
-                            $('.submit').removeAttr('disabled');
+                                    resizedCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, resizedCanvas.width, resizedCanvas.height);
+
+                                    var resizedImageData = resizedCanvas.toDataURL('image/jpeg');
+
+                                    originalImage.src = resizedImageData;
+
+                                    $('.face_p_text').html(`Face detected <i class="fa fa-check text-success"></i>`);
+                                    
+                                    $('#image_upload_btn').css({'opacity':1,'cursor':'pointer'});
+                                    $('#image_upload').removeAttr('disabled');
+                                    $('.submit').removeAttr('disabled');
+
+                                    removeBg(resizedImageData);
+
+
+                                } else {
+                                    
+                                    console.log('Face is not looking directly at the camera.');
+                                    $('.face_p_text').html(`Face is not looking directly at the camera. <i class="fa fa-close text-danger"></i>`);
+                                    $('#image_upload_btn').css({'opacity':1,'cursor':'pointer'});
+                                    $('#image_upload').removeAttr('disabled');
+                                    $('.submit').removeAttr('disabled');
+                                }
+                            } else {
+                                
+                                console.log('Face is not looking directly at the camera.');
+                                $('.face_p_text').html(`Face is not looking directly at the camera. <i class="fa fa-close text-danger"></i>`);
+                                $('#image_upload_btn').css({'opacity':1,'cursor':'pointer'});
+                                $('#image_upload').removeAttr('disabled');
+                                $('.submit').removeAttr('disabled');
+                            } 
+
+
                         }
+                        else if (data.length > 1) {
+                            console.log('Multiple faces detected.');
 
+                            $('.face_p_text').html(`Multiple faces detected <i class="fa fa-close text-danger"></i>`);
+                            $('#image_upload_btn').css({'opacity':1,'cursor':'pointer'});
+                            $('#image_upload').removeAttr('disabled');
 
-                    }
-                    else if (data.length > 1) {
-                        console.log('Multiple faces detected.');
+                        } else if (data.length == 0) {
 
-                        $('.face_p_text').html(`Multiple faces detected <i class="fa fa-close text-danger"></i>`);
-                        $('#image_upload_btn').css({'opacity':1,'cursor':'pointer'});
-                        $('#image_upload').removeAttr('disabled');
+                            console.log('No face detected.');
 
-                    } else if (data.length == 0) {
+                            $('.face_p_text').html(`No face detected <i class="fa fa-close text-danger"></i>`);
 
-                        console.log('No face detected.');
-
-                        $('.face_p_text').html(`No face detected <i class="fa fa-close text-danger"></i>`);
-
-                        $('#image_upload_btn').css({'opacity':1,'cursor':'pointer'});
-                        $('#image_upload').removeAttr('disabled');
-                    }
-                   
+                            $('#image_upload_btn').css({'opacity':1,'cursor':'pointer'});
+                            $('#image_upload').removeAttr('disabled');
+                        }
                     
-                },
-                error: function (error) {
-                    console.error(error);
-                }
-            });
+                        
+                    },
+                    error: function (error) {
+                        console.error(error);
+                    }
+                });
+            }  else {
+                alert('Document Size is not set.')
+            }
+           
         }
+
+
+        $(document).on('change','#document_type',function(e){
+                e.preventDefault();
+                var code = $(this).val();
+
+
+                $.ajax({
+                    url: 'getDocumentSize/'+code, 
+                    type: 'GET',
+                    success: function(response) {
+                        if(response.success) {
+                            
+                            var id = response.data.id;
+                            var width = response.data.width;
+                            var height = response.data.height;
+
+                            
+                            $('#document_width').val(width);
+                            $('#document_height').val(height);
+
+                        } else {
+                            console.log(response.message);
+                        }
+                        
+                        
+                    
+                    },
+                    error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    }
+                });
+            });
+
+
 
         $(document).on("change", "#image_upload", function (e) {
             e.preventDefault();
