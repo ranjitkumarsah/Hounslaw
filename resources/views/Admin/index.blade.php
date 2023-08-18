@@ -45,9 +45,20 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label for="document_size">Document size (in pixels)</label><span class="text-danger">*</span>
-                            <input type="text" name="document_size" id="document_size" class="form-control @error('name') is-invalid @enderror"  value="{{ old('name') }}" placeholder="Enter name">
-                            @error('document_size')
+                            <label for="document_width">Document width (in pixels)</label><span class="text-danger">*</span>
+                            <input type="text" name="document_width" id="document_width" class="form-control @error('name') is-invalid @enderror"  value="{{ old('name') }}" placeholder="Enter name">
+                            @error('document_width')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="document_height">Document height (in pixels)</label><span class="text-danger">*</span>
+                            <input type="text" name="document_height" id="document_height" class="form-control @error('name') is-invalid @enderror"  value="{{ old('name') }}" placeholder="Enter name">
+                            @error('document_height')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
