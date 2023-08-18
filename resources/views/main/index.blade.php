@@ -262,7 +262,7 @@
         </form>
         <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             
- 
+<!--  
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -288,7 +288,7 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
-            </div>
+            </div> -->
                 
         </div>
     </div>
@@ -403,60 +403,36 @@
                         var originalImage = document.getElementById("preview-image");
                         originalImage.src = resizedImage; 
 
-                        var faceAttributes = data[0].faceAttributes;
-                        var headPose = faceAttributes.headPose;
+                        var canvas = document.createElement('canvas');
+                        var ctx = canvas.getContext('2d');
+                        // canvas.width = faceRectangle.width;
+                        // canvas.height = faceRectangle.height;
 
-                        var yawAngle = headPose.yaw;
-                        var yawThreshold = 15; 
+                        // var croppedFaceImage = new Image();
+                        // croppedFaceImage.src = resizedImage;
+                        // croppedFaceImage.onload = function () {
+                        //     ctx.drawImage(croppedFaceImage, faceRectangle.left, faceRectangle.top, faceRectangle.width, faceRectangle.height, 0, 0, faceRectangle.width, faceRectangle.height);
+                        //     originalImage.src = canvas.toDataURL("image/jpeg"); 
+                        // };
 
-                        if (Math.abs(yawAngle) <= yawThreshold) {
+                                       
+                        var passportWidth = 2 * faceRectangle.width; 
+                        var passportHeight = 2 * faceRectangle.height; 
+                        canvas.width = passportWidth;
+                        canvas.height = passportHeight;
+
+                        var croppedFaceImage = new Image();
+                        croppedFaceImage.src = resizedImage;
+                        croppedFaceImage.onload = function () {
                             
-                            console.log('Face is looking directly at the camera.');
-                            
-                            // Crop and ResizeImage
-                            var canvas = document.createElement('canvas');
-                            var ctx = canvas.getContext('2d');
+                            ctx.drawImage(croppedFaceImage, faceRectangle.left, faceRectangle.top, faceRectangle.width, faceRectangle.height, 0, 0, passportWidth, passportHeight);
+                            originalImage.src = canvas.toDataURL("image/jpeg"); 
+                        };
+                        
 
-                            var headAndShouldersWidth = faceRectangle.width * 2;
-                            var headAndShouldersHeight = faceRectangle.height * 3;
-
-                            var headAndShouldersLeft = Math.max(faceRectangle.left - faceRectangle.width / 2, 0);
-                            var headAndShouldersTop = Math.max(faceRectangle.top - faceRectangle.height, 0);
-
-                            canvas.width = headAndShouldersWidth;
-                            canvas.height = headAndShouldersHeight;
-
-                            ctx.drawImage(originalImage, headAndShouldersLeft, headAndShouldersTop, headAndShouldersWidth, headAndShouldersHeight, 0, 0, canvas.width, canvas.height);
-
-                            var desiredWidth = 2 * 300;
-                            var desiredHeight = 2 * 300;
-
-                            var resizedCanvas = document.createElement('canvas');
-                            var resizedCtx = resizedCanvas.getContext('2d');
-                            resizedCanvas.width = desiredWidth;
-                            resizedCanvas.height = desiredHeight;
-
-                            resizedCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, resizedCanvas.width, resizedCanvas.height);
-
-                            var resizedImageData = resizedCanvas.toDataURL('image/jpeg');
-
-                            originalImage.src = resizedImageData;
-                            
-                            $('#image_upload_btn').css({'opacity':1,'cursor':'pointer'});
-                            $('#image_upload').removeAttr('disabled');
-                            $('.submit').removeAttr('disabled');
-
-                            // removeBg(resizedImageData);
-                        } else {
-                            
-                            console.log('Face is not looking directly at the camera.');
-                            $('.face_p_text').html(`Face is not looking directly at the camera. <i class="fa fa-close text-danger"></i>`);
-                            $('#image_upload_btn').css({'opacity':1,'cursor':'pointer'});
-                            $('#image_upload').removeAttr('disabled');
-                            $('.submit').removeAttr('disabled');
-                        }
-
-
+                        $('.face_p_text').html(`Face detected <i class="fa fa-check text-success"></i>`);
+                        
+                        // ... (rest of the code)
                     }
                     else if (data.length > 1) {
                         console.log('Multiple faces detected.');
