@@ -35,6 +35,11 @@ Route::post('/save-img-session',[MainController::class,'saveImageSession']);
 
 Auth::routes(['verify' => true]);
 
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/', [AdminController::class,'index'])->name('admin.home');
+});
+
+
 Route::get('/choose-payment', [HomeController::class, 'choosePayment'])->name('choose-payment');
 
 

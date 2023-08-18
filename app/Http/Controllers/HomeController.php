@@ -29,23 +29,29 @@ class HomeController extends Controller
     public function index()
     {
         $userDetailsJson = request()->cookie('user_details');
-
-        if ($userDetailsJson) {
-
-            $userDetails = json_decode($userDetailsJson, true);
-
-            // Update user details
-            $user = Auth::user();
-            $user->country = $userDetails['country_text'];
-            $user->address = $userDetails['address'];
-            $user->city = $userDetails['city'];
-            $user->postal_code = $userDetails['post_code'];
-            $user->save();
-
-            return redirect()->route('choose-payment');
-        }
         
-        return view('home');
+        if(Auth::user()->is_admin ==1) {
+            return redirect()->route('admin.home');
+        } 
+        else {
+            if ($userDetailsJson) {
+
+                $userDetails = json_decode($userDetailsJson, true);
+    
+                // Update user details
+                $user = Auth::user();
+                $user->country = $userDetails['country_text'];
+                $user->address = $userDetails['address'];
+                $user->city = $userDetails['city'];
+                $user->postal_code = $userDetails['post_code'];
+                $user->save();
+    
+                return redirect()->route('choose-payment');
+            }
+            
+            return view('home');
+        }
+       
     }
     
     public function choosePayment(Request $request)  {
