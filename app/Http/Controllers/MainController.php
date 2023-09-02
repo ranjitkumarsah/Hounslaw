@@ -28,10 +28,10 @@ class MainController extends Controller
             'document_type' => 'required',
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
-            'address' => 'required|string',
-            'city' => 'required|string|max:255',
-            'post_code' => 'required|string|max:10', 
-            'image' => 'required',
+            // 'address' => 'required|string',
+            // 'city' => 'required|string|max:255',
+            // 'post_code' => 'required|string|max:10', 
+            // 'image' => 'required',
         ];
 
         

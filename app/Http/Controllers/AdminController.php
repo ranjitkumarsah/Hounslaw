@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator; 
 use App\Models\Country;
 use App\Models\DocumentType;
+use App\Imports\updateDocSize;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\docTypeExport;
 
 class AdminController extends Controller
 {
@@ -66,5 +69,43 @@ class AdminController extends Controller
         ]);
 
         return response()->json(['message' => 'Document Type updated successfully']);
+    }
+
+    public function importDocTypeSize(Request $request)
+    {
+        $rules = [
+            'csv_file' => 'required|mimes:xlsx,xls,csv',
+           
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422); // 422 is the status code for validation errors
+        }
+
+        try {
+            $file =  $request->csv_file;
+            Excel::import(new updateDocSize(), $file);
+            
+            return response()->json([
+                'message' => 'CSV file imported successfully',
+                'status' => 200,
+            ], 200);
+
+        } catch (\Exception $e) {
+            // An error occurred during CSV import
+            dd($e->getMessage());
+            return response()->json([
+                'error' => 'Failed to import CSV file',
+                'status' => 500,
+            ], 500);
+        }
+    }
+    public function exportDocType()
+    {
+        return Excel::download(new docTypeExport(), 'document_types.csv');
     }
 }

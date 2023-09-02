@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
     />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
+    
     <!-- Styles -->
     <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('public/css/style.css') }}" rel="stylesheet">
@@ -36,7 +36,7 @@
 
     <link rel="stylesheet" href="https://unpkg.com/dropzone/dist/dropzone.css" />
     <link href="https://unpkg.com/cropperjs/dist/cropper.css" rel="stylesheet"/>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 </head>
 <body>
     <div id="app">
@@ -54,7 +54,7 @@
                     <ul class="navbar-nav me-auto">
 
                     </ul>
-
+                    {{--        
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
@@ -90,12 +90,73 @@
                             </li>
                         @endguest
                     </ul>
+                    --}}
                 </div>
             </div>
         </nav>
 
         <main class="py-4">
             @yield('content')
+
+            
+                   
+            <!-- Email Functionality -->
+            <button class="btn btn-success support_btn" data-bs-toggle="modal" data-bs-target="#emailModal" data-bs-whatever="@getbootstrap"><i class="fa fa-envelope" aria-hidden="true"></i> Need Help?</button>
+
+            <form id="sendEmail">
+                @csrf
+                <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
+                    <div class="modal-dialog " >
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="emailModalLabel">Send Query</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="mb-3">
+                                            <label for="name" class="col-form-label">Your Name </label><span class="text-danger">*</span>
+                                            <input type="text" class="form-control" id="name" name="name">
+                                            <span class="text-danger error-span name-error"  style=" font-size: 14px;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="mb-3">
+                                            <label for="email" class="col-form-label">Your Email </label><span class="text-danger">*</span>
+                                            <input type="email" class="form-control" id="email" name="email">
+                                            <span class="text-danger error-span email-error"  style=" font-size: 14px;"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="subject" class="col-form-label">Subject </label><span class="text-danger">*</span>
+                                    <input type="text" class="form-control" id="subject" name="subject">
+                                    <span class="text-danger error-span subject-error"  style=" font-size: 14px;"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="message" class="col-form-label">Message </label><span class="text-danger">*</span>
+                                    <textarea class="form-control" id="message" name="message"></textarea>
+                                    <span class="text-danger error-span message-error" style=" font-size: 14px;"></span>
+                                </div>
+                                
+                            </div>
+                            <div class="modal-footer">
+                                <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                                <button type="submit" class="btn btn-primary btn-email"><span class="send-mail-btn">Send Email</span></button>
+                            </div>
+                            <style>
+                                .spinner-border {
+                                    width: 1rem;
+                                    height: 1rem;
+                                }
+                            </style>
+                        </div>
+                    </div>
+                </div>
+            </form>
+           
         </main>
         
         <footer class="footer pt-0 px-3 pb-3 justify-content-between">
@@ -180,7 +241,75 @@
             
         </footer>
     </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <!-- <script src="https://unpkg.com/dropzone"></script> -->
     <script src="https://unpkg.com/cropperjs"></script>
+    <script>
+        $('#sendEmail').submit(function (e) { 
+            e.preventDefault();
+            
+            var formData = $(this).serialize();
+            // console.log(formData);
+
+            $('.error-span').text('');
+            $('.btn-email').attr('disabled', true);
+            $('.send-mail-btn').html(`Sending
+            <div class="spinner-border text-light" role="status">
+            <span class="visually-hidden">Loading...</span>
+                </div>`
+            );
+
+            $.ajax({
+                type: 'POST',
+                url: 'sendEmail',
+                data: formData,
+                success: function(response) {
+                    
+                    if(response.code == 200) {
+                        $('.send-mail-btn').html(`Sent`);
+                        toastr.success('Mail send successfully!', 'Success', { timeOut: 3000 });
+                        $('#emailModal').modal('hide');
+                    } else if(response.code == 500) {
+                        $('.send-mail-btn').html(`Failed`);
+                        toastr.error('Failed to send email', 'Error', { timeOut: 3000 });
+                        $('.btn-email').removeAttr('disabled');
+                    }
+
+                },
+                error: function(xhr, status, error) {
+                    
+                    console.error('Error:', status, error);
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        var errorMessages = xhr.responseJSON.errors;
+
+                        if (errorMessages.hasOwnProperty('email')) {
+                            $('.email-error').text(errorMessages['email'][0]);
+                        }
+                        if (errorMessages.hasOwnProperty('name')) {
+                            $('.name-error').text(errorMessages['name'][0]);
+                        }
+                        if (errorMessages.hasOwnProperty('message')) {
+                            $('.message-error').text(errorMessages['message'][0]);
+                        }
+                        if (errorMessages.hasOwnProperty('subject')) {
+                            $('.subject-error').text(errorMessages['subject'][0]);
+                        }
+
+                        $('.send-mail-btn').html(`Send Email`);
+                        $('.btn-email').removeAttr('disabled');
+                    }
+                }
+            });
+        });
+
+        $('#emailModal').on('hidden.bs.modal', function () {
+            $('#sendEmail').trigger('reset'); 
+            $('.error-span').text('');
+            $('.send-mail-btn').html(`Send Email`);
+            $('.btn-email').removeAttr('disabled');
+           
+        });
+    </script>
 </body>
 </html>

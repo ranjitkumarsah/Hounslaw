@@ -7,6 +7,10 @@
             width: 1rem;
             height: 1rem;
         }
+        .card {
+            max-width: fit-content;
+
+        }
     </style>
     <div id="carouselHome" class="carousel slide" data-ride="carousel">
         <!-- Indicators -->
@@ -167,7 +171,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-sm-12">
+                            <!-- <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="address">Address</label><span class="text-danger">*</span>
                                    <textarea name="address" class="form-control @error('address') is-invalid @enderror" id="address" placeholder="Address" required>{{ old('address') }}</textarea>
@@ -201,7 +205,7 @@
                                     <span class=" post-input-err invalid-feedback" style="display:none;" role="alert">Please enter numeric values only.</span>
                                
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -328,7 +332,7 @@
             formData.append('image_file', blobImage);
             formData.append('size', 'auto');
             formData.append('type', 'image/jpeg');
-            
+            formData.append('bg_color','fff');
 
             fetch(removeBgEndpoint,{
                 method:'POST',
@@ -349,7 +353,8 @@
                 $('.remove_bg_text').html(`Background removed <i class="fa fa-check text-success"></i>`);
                 // $('#image_upload_btn').re('Upload Image');
                 $('#image_upload_btn').css({ 'opacity': 1, 'background': '#84C261' });
-               
+                $('.submit').removeAttr('disabled');
+                
                 const reader = new FileReader();
                 reader.onloadend = function() {
                     const imageData = reader.result.split(',')[1];
@@ -415,8 +420,8 @@
 
                             var yawAngle = headPose.yaw;
                             var yawThreshold = 10; 
-                            var pitchThreshold = 7; 
-                            var rollThreshold = 7;
+                            var pitchThreshold = 8; 
+                            var rollThreshold = 8;
 
                             if (Math.abs(yawAngle) <= yawThreshold) {
 
@@ -424,17 +429,17 @@
                                     
                                     console.log('Face is looking directly at the camera.');
 
-                                    var desiredWidthInches = doc_width * 0.3937;
-                                    var desiredHeightInches = doc_height * 0.3937;
+                                    // var desiredWidthInches = doc_width * 0.3937;
+                                    // var desiredHeightInches = doc_height * 0.3937;
 
                                     // Crop and ResizeImage
                                     var canvas = document.createElement('canvas');
                                     var ctx = canvas.getContext('2d');
 
-                                    var headAndShouldersWidth = faceRectangle.width * 2;
+                                    var headAndShouldersWidth = faceRectangle.width * 2.7;
                                     var headAndShouldersHeight = faceRectangle.height * 3;
 
-                                    var headAndShouldersLeft = Math.max(faceRectangle.left - faceRectangle.width / 2, 0);
+                                    var headAndShouldersLeft = Math.max(faceRectangle.left - faceRectangle.width / 1.2, 0);
                                     var headAndShouldersTop = Math.max(faceRectangle.top - faceRectangle.height, 0);
 
                                     canvas.width = headAndShouldersWidth;
@@ -442,18 +447,33 @@
 
                                     ctx.drawImage(originalImage, headAndShouldersLeft, headAndShouldersTop, headAndShouldersWidth, headAndShouldersHeight, 0, 0, canvas.width, canvas.height);
 
-                                    var dpi = 300;
-                                    var desiredWidth = Math.round(desiredWidthInches * dpi);
-                                    var desiredHeight = Math.round(desiredHeightInches * dpi);
+                                    // var dpi = 300;
+                                    // var desiredWidth = Math.round(desiredWidthInches * dpi);
+                                    // var desiredHeight = Math.round(desiredHeightInches * dpi);
+
+                                    // var desiredAspectRatio = doc_width / doc_height;
+                                    // var currentAspectRatio = canvas.width / canvas.height;
 
                                     var resizedCanvas = document.createElement('canvas');
                                     var resizedCtx = resizedCanvas.getContext('2d');
-                                    resizedCanvas.width = desiredWidth;
-                                    resizedCanvas.height = desiredHeight;
+                                    // resizedCanvas.width = desiredWidth;
+                                    // resizedCanvas.height = desiredHeight;
+
+                                    // if (currentAspectRatio > desiredAspectRatio) {
+                                    //     resizedCanvas.width = doc_width;
+                                    //     resizedCanvas.height = doc_width / currentAspectRatio;
+                                    // } else {
+                                    //     resizedCanvas.width = doc_height * currentAspectRatio;
+                                    //     resizedCanvas.height = doc_height;
+                                    // }
+
+
+                                    resizedCanvas.width = doc_width;
+                                    resizedCanvas.height = doc_height;
 
                                     resizedCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, resizedCanvas.width, resizedCanvas.height);
 
-                                    var resizedImageData = resizedCanvas.toDataURL('image/jpeg');
+                                    var resizedImageData = resizedCanvas.toDataURL('image/jpeg',0.9);
 
                                     originalImage.src = resizedImageData;
 
@@ -461,7 +481,7 @@
                                     
                                     $('#image_upload_btn').css({'opacity':1,'cursor':'pointer'});
                                     $('#image_upload').removeAttr('disabled');
-                                    $('.submit').removeAttr('disabled');
+                                    
 
                                     removeBg(resizedImageData);
 
@@ -472,7 +492,7 @@
                                     $('.face_p_text').html(`Face is not looking directly at the camera. <i class="fa fa-close text-danger"></i>`);
                                     $('#image_upload_btn').css({'opacity':1,'cursor':'pointer'});
                                     $('#image_upload').removeAttr('disabled');
-                                    $('.submit').removeAttr('disabled');
+                                    // $('.submit').removeAttr('disabled');
                                 }
                             } else {
                                 

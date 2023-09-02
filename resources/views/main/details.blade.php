@@ -114,7 +114,7 @@
                         <div class="col-sm-6">
                            
                             <div class=" image-edit-card px-5 pt-2">
-                                <div class="card-body image-edit-card-body p-3">
+                                <div class="card-body image-edit-card-body p-0">
                                     <img id="previewImg" src="{{@$data['image_url']}}" class="w-100" alt="image">
                                 </div>
                             </div>

@@ -3718,7 +3718,8 @@
       display: none; }
   
   .navbar-light .navbar-brand {
-    color: rgba(0, 0, 0, 0.9); }
+    color: rgba(0, 0, 0, 0.9);
+      width: 10%; }
     .navbar-light .navbar-brand:hover, .navbar-light .navbar-brand:focus {
       color: rgba(0, 0, 0, 0.9); }
   
