@@ -22,10 +22,10 @@
                 
                
                 <div class="card-body">
-                    <form id="stripe-pay">
+                    <form id="stripe-pay" action="{{route('stripePay')}}" method="POST">
                     @csrf
                         <div class="row stripe-card-form">
-                            <div class="col-sm-6 form-group">
+                            <!-- <div class="col-sm-6 form-group">
                                 <label for="name">Name on card</label>
                                 <span class="text-danger">*</span>
                                 <input type="text" name="name" id="name" class="form-control" placeholder="John Doe">
@@ -55,7 +55,7 @@
                                 <span class="text-danger">*</span>
                                 <input type="text" name="cvv" id="cvv" class="form-control" placeholder="123" maxlength="4">
                                 <span class="text-danger error-span cvv-error" style="font-size:13px;"></span>
-                            </div>
+                            </div> -->
                             <div class="row my-5 justify-content-center">
                                 <!-- <a href="#" class="btn form-control btn-primary w-30">Proceed to Pay {{@$userDetails['payment_value']}}</a> -->
                                 <button class="btn btn-primary stripe-pay-btn" style="max-width: fit-content;" type="submit">Proceed to Pay {{@$userDetails['payment_value']}}</button>
@@ -146,64 +146,64 @@
         });
 
 
-        $('#stripe-pay').submit(function (e) { 
-            e.preventDefault();
+        // $('#stripe-pay').submit(function (e) { 
+        //     e.preventDefault();
             
-            var formData = $(this).serialize();
+        //     var formData = $(this).serialize();
            
-            $('.error-span').text('');
-            // $('.stripe-pay-btn').attr('disabled', true);
-            // $('.stripe-pay-btn').html(`Paying
-            // <div class="spinner-border text-light" role="status">
-            // <span class="visually-hidden">Loading...</span>
-            //     </div>`
-            // );
+        //     $('.error-span').text('');
+        //     // $('.stripe-pay-btn').attr('disabled', true);
+        //     // $('.stripe-pay-btn').html(`Paying
+        //     // <div class="spinner-border text-light" role="status">
+        //     // <span class="visually-hidden">Loading...</span>
+        //     //     </div>`
+        //     // );
 
-            $.ajax({
-                type: 'POST',
-                url: 'stripePay',
-                data: formData,
-                success: function(response) {
+        //     $.ajax({
+        //         type: 'POST',
+        //         url: 'stripePay',
+        //         data: formData,
+        //         success: function(response) {
                     
-                    if(response.status == 200) {
-                        $('.stripe-pay-btn').html(`Paid`);
-                        toastr.success('Payment done successfully!', 'Success', { timeOut: 3000 });
+        //             if(response.status == 200) {
+        //                 $('.stripe-pay-btn').html(`Paid`);
+        //                 toastr.success('Payment done successfully!', 'Success', { timeOut: 3000 });
 
-                    } else if(response.status == 500) {
-                        $('.stripe-pay-btn').html(`Failed`);
-                        toastr.error('Payment Failed', 'Error', { timeOut: 3000 });
-                        $('.stripe-pay-btn').removeAttr('disabled');
-                    }
+        //             } else if(response.status == 500) {
+        //                 $('.stripe-pay-btn').html(`Failed`);
+        //                 toastr.error('Payment Failed', 'Error', { timeOut: 3000 });
+        //                 $('.stripe-pay-btn').removeAttr('disabled');
+        //             }
 
-                },
-                error: function(xhr, status, error) {
+        //         },
+        //         error: function(xhr, status, error) {
                     
-                    console.error('Error:', status, error);
-                    if (xhr.responseJSON && xhr.responseJSON.errors) {
-                        var errorMessages = xhr.responseJSON.errors;
+        //             console.error('Error:', status, error);
+        //             if (xhr.responseJSON && xhr.responseJSON.errors) {
+        //                 var errorMessages = xhr.responseJSON.errors;
 
-                        if (errorMessages.hasOwnProperty('name')) {
-                            $('.name-error').text(errorMessages['name'][0]);
-                        }
-                        if (errorMessages.hasOwnProperty('card_number')) {
-                            $('.card-error').text(errorMessages['card_number'][0]);
-                        }
-                        if (errorMessages.hasOwnProperty('expiry_month')) {
-                            $('.month-error').text(errorMessages['expiry_month'][0]);
-                        }
-                        if (errorMessages.hasOwnProperty('expiry_year')) {
-                            $('.year-error').text(errorMessages['expiry_year'][0]);
-                        }
-                        if (errorMessages.hasOwnProperty('cvv')) {
-                            $('.cvv-error').text(errorMessages['cvv'][0]);
-                        }
+        //                 if (errorMessages.hasOwnProperty('name')) {
+        //                     $('.name-error').text(errorMessages['name'][0]);
+        //                 }
+        //                 if (errorMessages.hasOwnProperty('card_number')) {
+        //                     $('.card-error').text(errorMessages['card_number'][0]);
+        //                 }
+        //                 if (errorMessages.hasOwnProperty('expiry_month')) {
+        //                     $('.month-error').text(errorMessages['expiry_month'][0]);
+        //                 }
+        //                 if (errorMessages.hasOwnProperty('expiry_year')) {
+        //                     $('.year-error').text(errorMessages['expiry_year'][0]);
+        //                 }
+        //                 if (errorMessages.hasOwnProperty('cvv')) {
+        //                     $('.cvv-error').text(errorMessages['cvv'][0]);
+        //                 }
 
-                        $('.stripe-pay-btn').html(`Proceed to Pay`);
-                        $('.stripe-pay-btn').removeAttr('disabled');
-                    }
-                }
-            });
-        });
+        //                 $('.stripe-pay-btn').html(`Proceed to Pay`);
+        //                 $('.stripe-pay-btn').removeAttr('disabled');
+        //             }
+        //         }
+        //     });
+        // });
        
     });
     

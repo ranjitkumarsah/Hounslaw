@@ -36,6 +36,7 @@ Route::get('getDocumentSize/{code}',[MainController::class,'documentSize']);
 
 Route::post('sendEmail',[HomeController::class,'sendEmail'])->name('sendEmail');
 Route::post('stripePay',[PaymentController::class,'stripeCheckout'])->name('stripePay');
+Route::get('stripe/checkout/success',[PaymentController::class,'stripeCheckoutSuccess'])->name('stripe.checkout.success');
 
 Route::get('/choose-payment', [HomeController::class, 'choosePayment'])->name('choose-payment');
 Route::get('/thank-you', [MainController::class, 'thankYou'])->name('thank-you');
