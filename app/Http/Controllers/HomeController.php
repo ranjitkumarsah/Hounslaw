@@ -65,22 +65,22 @@ class HomeController extends Controller
             $userDetails = json_decode($userDetailsJson, true);
 
             // Save document
-            $document = new Document();
-            $document->user_id = Auth::user()->id;
-            $document->country_code =  $userDetails['country'];
-            $document->document_type_id = $userDetails['document_type'];
-            $document->image = $userDetails['image'];
-            $document->delivery_option = $userDetails['delivery_option_text'];
-            $document->delivery_option_val = $userDetails['delivery_option_val'];
+            // $document = new Document();
+            // $document->user_id = Auth::user()->id;
+            // $document->country_code =  $userDetails['country'];
+            // $document->document_type_id = $userDetails['document_type'];
+            // $document->image = $userDetails['image'];
+            // $document->delivery_option = $userDetails['delivery_option_text'];
+            // $document->delivery_option_val = $userDetails['delivery_option_val'];
             // $document->save();
-            if($userDetails['delivery_option_val'] == 1 || $userDetails['delivery_option_val'] == 3) {
+            // if($userDetails['delivery_option_val'] == 1 || $userDetails['delivery_option_val'] == 3) {
 
-                $userDetails['payment_value'] = ' £5.99';
+            //     $userDetails['payment_value'] = ' £5.99';
 
-            } elseif ($userDetails['delivery_option_val'] == 2) {
+            // } elseif ($userDetails['delivery_option_val'] == 2) {
 
-                $userDetails['payment_value'] =   '£7.50';
-            }
+            //     $userDetails['payment_value'] =   '£7.50';
+            // }
         }
 
         return view('main.payment_page',compact('userDetails'));
