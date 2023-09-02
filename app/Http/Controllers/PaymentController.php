@@ -113,7 +113,7 @@ class PaymentController extends Controller
             $message = "Hi $name,\n\nYour payment was successfully processed. Your order/transaction ID is: $transactionId.\n\nThank you for your purchase!\n\nSincerely,\nHounslaw.";
 
             Mail::raw($message, function ($message) use ($email) {
-                $message->to('protolabzeckyphp@gmail.com')
+                $message->to($email)
                         ->subject('Payment Confirmation');
             });
 
