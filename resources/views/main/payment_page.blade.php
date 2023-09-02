@@ -19,7 +19,6 @@
                         </div>
                     </div>
                 </div>
-                
                
                 <div class="card-body">
                     <form id="stripe-pay" action="{{route('stripePay')}}" method="POST">

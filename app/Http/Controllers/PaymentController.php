@@ -45,14 +45,26 @@ class PaymentController extends Controller
 
     public function stripeCheckout(Request $request)
     {
+        $userDetailsJson = request()->cookie('user_details');
+        $userDetails = json_decode($userDetailsJson, true);
+        if (!$userDetails) {
+            echo "No Data Found.";
+        }
+
+        $name = $userDetails['name'];
+        $email = $userDetails['email'];
+        $image = $userDetails['image'];
+
         $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
 
         $redirectUrl = route('stripe.checkout.success').'?session_id={CHECKOUT_SESSION_ID}';
 
+
         $response = $stripe->checkout->sessions->create([
             'success_url' => $redirectUrl,
 
-            // 'customer_email' => 'demo@gmail.com',
+            'customer_email' => $email,
+            
 
             'payment_method_types' => ['card'],
 
@@ -60,7 +72,8 @@ class PaymentController extends Controller
                 [
                     'price_data' => [
                         'product_data' => [
-                            'name' => 'Test ',
+                            'name' => 'Online Passport Image',
+                            'images' => [$image],
                         ],
                         'unit_amount' => 100 * 5,
                         'currency' => 'USD',
@@ -70,8 +83,9 @@ class PaymentController extends Controller
             ],
 
             'mode' => 'payment',
-            'allow_promotion_codes' => true,
-            
+            // 'allow_promotion_codes' => true,
+            'customer_email' => $email,
+            'client_reference_id' => $name,
         ]);
 
         return redirect($response['url']);
@@ -83,7 +97,28 @@ class PaymentController extends Controller
 
         $response = $stripe->checkout->sessions->retrieve($request->session_id);
 
-        dd($response);
-        return redirect()->route('stripe.index')->with('success','Payment successful.');
+        if ($response->payment_status === 'paid') {
+            $transactionId = $response->payment_intent;
+            
+            // Send a simple confirmation email
+            $userDetailsJson = request()->cookie('user_details');
+            $userDetails = json_decode($userDetailsJson, true);
+            if (!$userDetails) {
+                echo "No Data Found.";
+            }
+    
+            $name = $userDetails['name'];
+            $email = $userDetails['email'];
+
+            $message = "Hi $name,\n\nYour payment was successfully processed. Your order/transaction ID is: $transactionId.\n\nThank you for your purchase!\n\nSincerely,\nHounslaw.";
+
+            Mail::raw($message, function ($message) use ($email) {
+                $message->to('protolabzeckyphp@gmail.com')
+                        ->subject('Payment Confirmation');
+            });
+
+            return view('main.thank-you',compact('transactionId'));
+
+        }
     }
 }

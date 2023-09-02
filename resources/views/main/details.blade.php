@@ -30,7 +30,7 @@
                             <label><b>Email:</b> <span>{{@$data['email']}}</span></label>
                             
                         </div>
-                        <div class="col-sm-12">
+                        <!-- <div class="col-sm-12">
                             <label><b>Address:</b> <span>{{@$data['address']}}</span></label>
                         </div>
                         <div class="col-sm-12">
@@ -38,7 +38,7 @@
                         </div>
                         <div class="col-sm-12">
                             <label><b>PostCode:</b> <span>{{@$data['post_code']}}</span></label>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="row">
@@ -130,7 +130,7 @@
             </div>
             <hr>
             <form action="" id="details_form">
-                <div class="row ">
+                <!-- <div class="row ">
                     <h4 class="text-center fw-bold mt-3 mb-4">Delivery option</h4>
                     <div class="col-sm-12 form-group">
                         <label for="document_delivery_option">Please select your document delivery option </label><span class="text-danger">*</span>
@@ -142,18 +142,7 @@
                         </select>
                         <span id="delivery_option_error" class="text-danger d-none">Please select any one delivery option from above dropdown.</span>
                     </div>
-                    <!-- <div class="col-sm-6 form-group">
-                        <label for="payment_method">Please select payment method </label><span class="text-danger">*</span>
-
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                            <label class="form-check-label" for="inlineRadio1">Credit/Debit Cards (Power by Stripe)</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                            <label class="form-check-label" for="inlineRadio2">Paypal</label>
-                        </div>
-                    </div> -->
+                   
                     <div class="row">
                         <div class="col-sm-12">
                             <h5>Important Notes</h5>
@@ -168,7 +157,7 @@
                             </ol>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="row mt-5  mb-4 justify-content-center">
 
                     <button type="submit" class="form-control btn btn-primary submit px-3 " style="width:200px;">Proceed</button>

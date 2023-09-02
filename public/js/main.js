@@ -273,15 +273,15 @@ $(function () {
 
         $('#details_form').submit(function(event){
             event.preventDefault();
-            var delivery_option_val = $('#document_delivery_option').val();
+            // var delivery_option_val = $('#document_delivery_option').val();
 
-            var delivery_option_text = $('#document_delivery_option').find("option:selected").text();
+            // var delivery_option_text = $('#document_delivery_option').find("option:selected").text();
 
-            if(!delivery_option_val) {
+            // if(!delivery_option_val) {
                 
-                $('#delivery_option_error').removeClass('d-none');
-            } else {
-                $('#delivery_option_error').addClass('d-none');
+                // $('#delivery_option_error').removeClass('d-none');
+            // } else {
+                // $('#delivery_option_error').addClass('d-none');
 
                 
                 const canvas = document.createElement("canvas");
@@ -304,8 +304,8 @@ $(function () {
                     url: 'save-img-session',
                     data: { 
                         image: image,
-                        delivery_option_val: delivery_option_val,
-                        delivery_option_text: delivery_option_text
+                        // delivery_option_val: delivery_option_val,
+                        // delivery_option_text: delivery_option_text
                      },
                     success: function(response) {
                         
@@ -320,7 +320,7 @@ $(function () {
                         console.error('Error:', status, error);
                     }
                 });
-            }
+            // }
         });
     });
 

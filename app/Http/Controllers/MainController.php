@@ -27,7 +27,7 @@ class MainController extends Controller
             'country' => 'required',
             'document_type' => 'required',
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email',
+            'email' => 'required|email|max:255',
             // 'address' => 'required|string',
             // 'city' => 'required|string|max:255',
             // 'post_code' => 'required|string|max:10', 
@@ -66,7 +66,7 @@ class MainController extends Controller
         $dataJson = json_encode($data);
 
         // Store the JSON string as a cookie
-        Cookie::queue('user_details', $dataJson);
+        Cookie::queue('user_details', $dataJson, 60);
 
         return view('main.details',compact('data'));
     }
@@ -143,11 +143,11 @@ class MainController extends Controller
         }
 
         $userDetails['image'] = $fullUrl;
-        $userDetails['delivery_option_val'] = $request->delivery_option_val;
-        $userDetails['delivery_option_text'] = $request->delivery_option_text;
+        // $userDetails['delivery_option_val'] = $request->delivery_option_val;
+        // $userDetails['delivery_option_text'] = $request->delivery_option_text;
 
         $updatedUserDetailsJson = json_encode($userDetails);
-        Cookie::queue('user_details', $updatedUserDetailsJson);
+        Cookie::queue('user_details', $updatedUserDetailsJson,60);
         // session(['user_data' => $userDetails]);
 
         $redirectUrl = route('choose-payment');
