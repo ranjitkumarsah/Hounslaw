@@ -47,48 +47,50 @@ class PaymentController extends Controller
     {
         $userDetailsJson = request()->cookie('user_details');
         $userDetails = json_decode($userDetailsJson, true);
-        if (!$userDetails) {
-            echo "No Data Found.";
+        if ($userDetails) {
+            $name = $userDetails['name'];
+            $email = $userDetails['email'];
+            $image = $userDetails['image'];
+    
+            $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+    
+            $redirectUrl = route('stripe.checkout.success').'?session_id={CHECKOUT_SESSION_ID}';
+    
+    
+            $response = $stripe->checkout->sessions->create([
+                'success_url' => $redirectUrl,
+    
+                'customer_email' => $email,
+                
+    
+                'payment_method_types' => ['card'],
+    
+                'line_items' => [
+                    [
+                        'price_data' => [
+                            'product_data' => [
+                                'name' => 'Online Passport Image',
+                                'images' => [$image],
+                            ],
+                            'unit_amount' => 100 * 5,
+                            'currency' => 'USD',
+                        ],
+                        'quantity' => 1
+                    ],
+                ],
+    
+                'mode' => 'payment',
+                // 'allow_promotion_codes' => true,
+                'customer_email' => $email,
+                'client_reference_id' => $name,
+            ]);
+    
+            return redirect($response['url']);
+        } else {
+            return redirect('/');
         }
 
-        $name = $userDetails['name'];
-        $email = $userDetails['email'];
-        $image = $userDetails['image'];
-
-        $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
-
-        $redirectUrl = route('stripe.checkout.success').'?session_id={CHECKOUT_SESSION_ID}';
-
-
-        $response = $stripe->checkout->sessions->create([
-            'success_url' => $redirectUrl,
-
-            'customer_email' => $email,
-            
-
-            'payment_method_types' => ['card'],
-
-            'line_items' => [
-                [
-                    'price_data' => [
-                        'product_data' => [
-                            'name' => 'Online Passport Image',
-                            'images' => [$image],
-                        ],
-                        'unit_amount' => 100 * 5,
-                        'currency' => 'USD',
-                    ],
-                    'quantity' => 1
-                ],
-            ],
-
-            'mode' => 'payment',
-            // 'allow_promotion_codes' => true,
-            'customer_email' => $email,
-            'client_reference_id' => $name,
-        ]);
-
-        return redirect($response['url']);
+        
     }
 
     public function stripeCheckoutSuccess(Request $request)

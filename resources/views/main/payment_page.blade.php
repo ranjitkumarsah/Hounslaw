@@ -55,6 +55,12 @@
                                 <input type="text" name="cvv" id="cvv" class="form-control" placeholder="123" maxlength="4">
                                 <span class="text-danger error-span cvv-error" style="font-size:13px;"></span>
                             </div> -->
+                            <div class="row mt-5 justify-content-center">
+                                <div class="col-md-7">
+                                    <img  src="{{asset('public/images/cards.png')}}" alt="" class="w-100 cards-image">
+
+                                </div>
+                            </div>
                             <div class="row my-5 justify-content-center">
                                 <!-- <a href="#" class="btn form-control btn-primary w-30">Proceed to Pay {{@$userDetails['payment_value']}}</a> -->
                                 <button class="btn btn-primary stripe-pay-btn" style="max-width: fit-content;" type="submit">Proceed to Pay {{@$userDetails['payment_value']}}</button>
@@ -78,6 +84,13 @@
         </div>
     </div>
 </div>
+<style>
+    .cards-image {
+        border: 2.5px solid #bbb;
+        padding: 10px;
+        border-radius: 4px
+    }
+</style>
 <script src="https://js.stripe.com/v3/"></script>
 <script>
     $(document).ready(function () {
