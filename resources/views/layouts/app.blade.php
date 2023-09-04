@@ -106,7 +106,7 @@
             <form id="sendEmail">
                 @csrf
                 <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
-                    <div class="modal-dialog " >
+                    <div class="modal-dialog modal-dialog-centered" >
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="emailModalLabel">Send Query</h5>
