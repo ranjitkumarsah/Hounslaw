@@ -263,37 +263,7 @@
             </div>
 
         </form>
-        <!-- <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-            
- 
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Crop Image Before Upload</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="img-container">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <img class="w-100" src="" id="sample_image" />
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="preview"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="crop" class="btn btn-primary">Crop</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-                
-        </div> -->
+
     </div>
 
     <script>
@@ -301,8 +271,8 @@
         $('.submit').attr('disabled',true);
 
 
-        // const apiKey = "dHCTsJXFN8io6XMbVTUaL54N"; 
-        const apiKey = "uf8s2si1VNiwj5ZeegbiiiXB";
+        const apiKey = "dHCTsJXFN8io6XMbVTUaL54N"; 
+        // const apiKey = "uf8s2si1VNiwj5ZeegbiiiXB";
         const removeBgEndpoint = "https://api.remove.bg/v1.0/removebg"; 
 
         var originalImage = null;
@@ -592,31 +562,6 @@
                 reader.readAsDataURL(selectedImage);
             }
         });
-
-        // $modal.on('shown.bs.modal', function() {
-        //     cropper = new Cropper(image, {
-        //     aspectRatio: 1,
-        //     viewMode: 3,
-        //     preview:'.preview'
-        //     });
-        // }).on('hidden.bs.modal', function(){
-        //     cropper.destroy();
-        //     cropper = null;
-
-        //     $('#image_upload_btn').css({'opacity':1,'cursor':'pointer'});
-        //     $('#image_upload').removeAttr('disabled');
-        // });
-
-        // $('#crop').click(function() {
-        //     canvas = cropper.getCroppedCanvas({
-        //         width: 400,
-        //         height: 400
-        //     });
-
-        //     var croppedImage = canvas.toDataURL();
-        //     detectFaces(croppedImage);
-        //     $modal.modal('hide');
-        // });
 
     </script>
 
