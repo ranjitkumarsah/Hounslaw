@@ -17,7 +17,7 @@
                 <div class="text-center">
                     <h3>Thank You !</h3>
                     <p>Thank you for your payment, it’s processing </p>
-                    <p> Your order id is: {{@$transactionId}}</p>
+                    <p> Your order id is: @if(Session::has('transactionId')) {{@$transactionId}} @endif</p>
                     <p>You will receive an order confirmation email with details of your order and a link to track your process.</p>
 
                     <a href="{{URL('/')}}" class="btn form-control btn-primary w-30">Back Home</a>

@@ -117,7 +117,7 @@ class PaymentController extends Controller
                         ->subject('Payment Confirmation');
             });
 
-            return view('main.thank-you',compact('transactionId'));
+            return redirect()->route('thank-you')->with('transactionId',$transactionId);
 
         }
     }
