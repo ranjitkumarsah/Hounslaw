@@ -1,4 +1,17 @@
 $(function () {
+
+    // Diable Right Click
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    });
+
+    // Disable F12 and CTRL+SHIFT+I
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+            e.preventDefault();
+        }
+    });
+        
     $(document).scroll(function () {
         const nav = $(".navbar");
         const nav_link = $('.nav-link'); 

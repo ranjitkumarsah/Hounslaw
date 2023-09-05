@@ -417,29 +417,21 @@
 
                                     ctx.drawImage(originalImage, headAndShouldersLeft, headAndShouldersTop, headAndShouldersWidth, headAndShouldersHeight, 0, 0, canvas.width, canvas.height);
 
-                                    // var dpi = 300;
-                                    // var desiredWidth = Math.round(desiredWidthInches * dpi);
-                                    // var desiredHeight = Math.round(desiredHeightInches * dpi);
 
-                                    // var desiredAspectRatio = doc_width / doc_height;
-                                    // var currentAspectRatio = canvas.width / canvas.height;
+                                    var desiredWidthInch = doc_width / 25.4;
+                                    var desiredHeightInch = doc_height / 25.4;
+                                    
+                                    var dpi = 300;
+
+                                    // Calculate the dimensions for the resized image (in pixels)
+                                    var resizedWidth = desiredWidthInch * dpi;
+                                    var resizedHeight = desiredHeightInch * dpi;
 
                                     var resizedCanvas = document.createElement('canvas');
                                     var resizedCtx = resizedCanvas.getContext('2d');
-                                    // resizedCanvas.width = desiredWidth;
-                                    // resizedCanvas.height = desiredHeight;
 
-                                    // if (currentAspectRatio > desiredAspectRatio) {
-                                    //     resizedCanvas.width = doc_width;
-                                    //     resizedCanvas.height = doc_width / currentAspectRatio;
-                                    // } else {
-                                    //     resizedCanvas.width = doc_height * currentAspectRatio;
-                                    //     resizedCanvas.height = doc_height;
-                                    // }
-
-
-                                    resizedCanvas.width = doc_width;
-                                    resizedCanvas.height = doc_height;
+                                    resizedCanvas.width = resizedWidth;
+                                    resizedCanvas.height = resizedHeight;
 
                                     resizedCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, resizedCanvas.width, resizedCanvas.height);
 
