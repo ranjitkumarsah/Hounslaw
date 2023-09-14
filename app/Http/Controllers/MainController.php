@@ -121,19 +121,52 @@ class MainController extends Controller
         }
     }
     
+    public function downloadImage(Request $request) {
+        
+        $imageDataUrl = $request->image;
+        $imageBinary = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageDataUrl));
+    
+        $fileName = 'image_download_' . time() . '.jpg';
+        $filePath = storage_path('app/public/' . $fileName);
+
+        $image = imagecreatefromstring($imageBinary);
+    
+        $newDPI = 300;
+        imageresolution($image, $newDPI, $newDPI);
+        imagejpeg($image, $filePath, 100);
+        imagedestroy($image);
+
+        return response()->download($filePath, $fileName);
+    }
+    
+
     public function saveImageSession(Request $request) {
         
         $imageDataUrl = $request->image;
         $imageBinary = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageDataUrl));
 
-        $fileName = 'image_edited_' . time() . '.jpg';
-        Storage::disk('public')->put($fileName, $imageBinary);
 
-        $filePath = '/public/' . $fileName;
-        // $fileUrl = Storage::url($filePath);
-        $baseUrl = URL::to('/storage/app');
+        $fileName = 'image_' . time() . '.jpg';
+        $filePath = storage_path('app/public/' . $fileName);
 
-        $fullUrl = $baseUrl . $filePath;
+        $image = imagecreatefromstring($imageBinary);
+    
+        $newDPI = 300;
+        imageresolution($image, $newDPI, $newDPI);
+        imagejpeg($image, $filePath, 100);
+        imagedestroy($image);
+
+        $imageUrl = asset('storage/app/public/' . $fileName);
+
+
+        // $fileName = 'image_edited_' . time() . '.jpg';
+        // Storage::disk('public')->put($fileName, $imageBinary);
+
+        // $filePath = '/public/' . $fileName;
+        // // $fileUrl = Storage::url($filePath);
+        // $baseUrl = URL::to('/storage/app');
+
+        // $fullUrl = $baseUrl . $filePath;
 
         // $userDetails = session('user_details');
         $userDetailsJson = request()->cookie('user_details');
@@ -142,7 +175,7 @@ class MainController extends Controller
             return response()->json(['message' => 'data not found.']);
         }
 
-        $userDetails['image'] = $fullUrl;
+        $userDetails['image'] = $imageUrl;
         // $userDetails['delivery_option_val'] = $request->delivery_option_val;
         // $userDetails['delivery_option_text'] = $request->delivery_option_text;
 

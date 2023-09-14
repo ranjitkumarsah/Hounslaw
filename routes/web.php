@@ -25,12 +25,14 @@ use App\Http\Controllers\PaymentController;
 Route::get('/', [MainController::class, 'index']);
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::post('/cropImage', [MainController::class, 'cropImage'])->name('cropImage');
 
 Route::post('details', [MainController::class, 'details'])->name('details');
 
 
 Route::get('getDocTypes/{code}',[MainController::class,'getDocTypes'])->name('getDocTypes');
 
+Route::post('/download-image',[MainController::class,'downloadImage']);
 Route::post('/save-img-session',[MainController::class,'saveImageSession']);
 Route::get('getDocumentSize/{code}',[MainController::class,'documentSize']);
 

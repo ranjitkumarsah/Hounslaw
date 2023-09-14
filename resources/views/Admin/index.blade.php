@@ -48,7 +48,7 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label for="document_width">Document width (in mm)</label><span class="text-danger">*</span>
+                            <label for="document_width">Document width (in px)</label><span class="text-danger">*</span>
                             <input type="text" name="document_width" id="document_width" class="form-control @error('name') is-invalid @enderror"  value="{{ old('name') }}" placeholder="Enter width">
                             @error('document_width')
                                 <span class="invalid-feedback" role="alert">
@@ -59,7 +59,7 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label for="document_height">Document height (in mm)</label><span class="text-danger">*</span>
+                            <label for="document_height">Document height (in px)</label><span class="text-danger">*</span>
                             <input type="text" name="document_height" id="document_height" class="form-control @error('name') is-invalid @enderror"  value="{{ old('name') }}" placeholder="Enter height">
                             @error('document_height')
                                 <span class="invalid-feedback" role="alert">

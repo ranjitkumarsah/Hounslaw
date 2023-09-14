@@ -126,7 +126,7 @@ class HomeController extends Controller
         } catch (\Exception $e) {
            
             return response()->json([
-                'message' => 'Email sending failed',
+                'message' => $e->getMessage(),
                 'code' => 500,
             ], 500);
         }

@@ -111,12 +111,15 @@ class PaymentController extends Controller
     
             $name = $userDetails['name'];
             $email = $userDetails['email'];
+            $image = $userDetails['image'];
+
 
             $message = "Hi $name,\n\nYour payment was successfully processed. Your order/transaction ID is: $transactionId.\n\nThank you for your purchase!\n\nSincerely,\nHounslaw.";
 
-            Mail::raw($message, function ($message) use ($email) {
+            Mail::raw($message, function ($message) use ($email, $image) {
                 $message->to($email)
-                        ->subject('Payment Confirmation');
+                        ->subject('Payment Confirmation')
+                        ->attach($image);
             });
 
             return redirect()->route('thank-you')->with('transactionId',$transactionId);

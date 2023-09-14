@@ -295,10 +295,10 @@
                         if (errorMessages.hasOwnProperty('subject')) {
                             $('.subject-error').text(errorMessages['subject'][0]);
                         }
-
-                        $('.send-mail-btn').html(`Send Email`);
-                        $('.btn-email').removeAttr('disabled');
                     }
+                    toastr.error('Failed to send email', 'Error', { timeOut: 3000 });
+                    $('.send-mail-btn').html(`Send Email`);
+                    $('.btn-email').removeAttr('disabled');
                 }
             });
         });

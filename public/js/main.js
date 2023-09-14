@@ -1,16 +1,16 @@
 $(function () {
 
-    // Diable Right Click
-    document.addEventListener('contextmenu', function (e) {
-        e.preventDefault();
-    });
+    // // Diable Right Click
+    // document.addEventListener('contextmenu', function (e) {
+    //     e.preventDefault();
+    // });
 
-    // Disable F12 and CTRL+SHIFT+I
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-            e.preventDefault();
-        }
-    });
+    // // Disable F12 and CTRL+SHIFT+I
+    // document.addEventListener('keydown', function (e) {
+    //     if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+    //         e.preventDefault();
+    //     }
+    // });
         
     $(document).scroll(function () {
         const nav = $(".navbar");
@@ -95,10 +95,74 @@ $(function () {
         ctx.filter = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`;
         ctx.drawImage(imgPreview, 0, 0, canvas.width, canvas.height);
     
-        const link = document.createElement("a");
-        link.download = "image.jpg";
-        link.href = canvas.toDataURL();
-        link.click();
+        // const link = document.createElement("a");
+        // link.download = "image.jpg";
+        // link.href = canvas.toDataURL();
+        // link.click();
+
+        const image = canvas.toDataURL();
+        
+        
+        // Create a hidden form for submitting the image data
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = 'download-image'; 
+        form.style.display = 'none';
+
+        const csrfTokenInput = document.createElement('input');
+        csrfTokenInput.type = 'hidden';
+        csrfTokenInput.name = '_token';
+        csrfTokenInput.value = $('meta[name="csrf-token"]').attr('content'); 
+        form.appendChild(csrfTokenInput);
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'image';
+        input.value = image;
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+
+        form.submit();
+
+
+
+        // $.ajaxSetup({
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     }
+        // });
+        // $.ajax({
+        //     type: 'POST',
+        //     url: 'download-image',
+        //     data: { 
+        //         image: image,
+                
+        //         },
+        //     success: function(response) {
+                
+        //         // Check if the response is a download
+        //         if (response instanceof Blob) {
+        //             const url = window.URL.createObjectURL(response);
+        //             const a = document.createElement('a');
+        //             a.href = url;
+        //             a.download = 'processed_image.jpg';
+        //             document.body.appendChild(a);
+        //             a.click();
+        //             window.URL.revokeObjectURL(url);
+        //         } else {
+        //             console.log('Error processing the image on the server.');
+        //         }
+                
+
+        //     },
+        //     error: function(xhr, status, error) {
+                
+        //         console.error('Error:', status, error);
+        //     }
+        // });
+
+
     });
 
     var slider = document.getElementById("brightness_range");

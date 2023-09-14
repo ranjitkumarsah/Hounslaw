@@ -248,7 +248,7 @@
                                             </li>
                                             <li>Use simple photo don't use any filter.</li>
                                             <li>Only jpg or jpeg file is allowed.</li>
-                                            <li>Minimum 50KB and maximum 10MB files size is allowed.</li>
+                                            <li>Minimum 50KB and maximum 5MB files size is allowed.</li>
                                         </ol>
                                     </div>
                                 </div>
@@ -369,7 +369,6 @@
 
                 $.ajax({
                     url: `${endpoint}?returnFaceAttributes=headPose&returnFaceLandmarks=true`,
-                
                     type: "POST",
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
@@ -418,20 +417,25 @@
                                     ctx.drawImage(originalImage, headAndShouldersLeft, headAndShouldersTop, headAndShouldersWidth, headAndShouldersHeight, 0, 0, canvas.width, canvas.height);
 
 
-                                    var desiredWidthInch = doc_width / 25.4;
-                                    var desiredHeightInch = doc_height / 25.4;
+                                    // var desiredWidthInch = doc_width / 25.4;
+                                    // var desiredHeightInch = doc_height / 25.4;
                                     
-                                    var dpi = 300;
+                                    // var dpi = 300;
 
                                     // Calculate the dimensions for the resized image (in pixels)
-                                    var resizedWidth = desiredWidthInch * dpi;
-                                    var resizedHeight = desiredHeightInch * dpi;
+                                    // var resizedWidth = desiredWidthInch * dpi;
+                                    // var resizedHeight = desiredHeightInch * dpi;
 
                                     var resizedCanvas = document.createElement('canvas');
                                     var resizedCtx = resizedCanvas.getContext('2d');
 
-                                    resizedCanvas.width = resizedWidth;
-                                    resizedCanvas.height = resizedHeight;
+                                    // resizedCanvas.width = resizedWidth;  
+                                    // resizedCanvas.height = resizedHeight;
+
+                                    resizedCanvas.width = doc_width;
+                                    resizedCanvas.height = doc_height;
+
+                                    
 
                                     resizedCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, resizedCanvas.width, resizedCanvas.height);
 
@@ -486,9 +490,21 @@
                     
                         
                     },
-                    error: function (error) {
-                        console.error(error);
+                    error: function (errorResponse) {
+                        console.error(errorResponse);
+
+                        if (errorResponse && errorResponse.responseJSON && errorResponse.responseJSON.error) {
+                            var errorMessage = errorResponse.responseJSON.error.message;
+                            $('.face_p_text').html(`${errorMessage} <i class="fa fa-close text-danger"></i>`);
+                        } else {
+                            
+                            $('.face_p_text').html('An error occurred. <i class="fa fa-close text-danger"></i>');
+                        }
+
+                        $('#image_upload_btn').css({'opacity': 1, 'cursor': 'pointer'});
+                        $('#image_upload').removeAttr('disabled');
                     }
+
                 });
             }  else {
                 alert('Document Size is not set.')
@@ -533,7 +549,8 @@
 
         $(document).on("change", "#image_upload", function (e) {
             e.preventDefault();
-
+            $('.face_p_text').html('');
+            
             $('#image_upload_btn').css({'opacity': 0.6, 'cursor': 'context-menu'});
             $(this).prop('disabled', true);
             
@@ -541,6 +558,18 @@
             var selectedImage = e.target.files[0];
             
             if (selectedImage) {
+                var maxSize = 5 * 1024 * 1024; 
+                if (selectedImage.size > maxSize) {
+                   
+                    $('.face_p_text').html('The valid image size should be no larger than 5MB. <i class="fa fa-close text-danger"></i>');
+                    
+                   
+                    $(this).val("");
+                    $('#image_upload_btn').css({'opacity': 1, 'cursor': 'pointer'});
+                    $(this).prop('disabled', false);
+                    
+                    return; 
+                }
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     var img = new Image();

@@ -5,19 +5,19 @@
     <div class="row justify-content-center align-items-center">
         <div class="col-md-8">
             <h3 class="text-center mb-4 fw-bold">Choose payment methods</h4>
-            <div class="card bg-white shadow payment-card">
+            <div class="card bg-white shadow payment-card w-100">
                 <div class="row ">
-                    <div class="col-6 pr-0">
+                    <div class="col-sm-12">
                         <div class="payments  stripe-payment d-flex justify-content-center border-bottom">
                             <button class="btn stripe-btn toggle-btn text-center w-100 active-btn">Credit/Debit Cards</button>
                         </div>
                        
                     </div>
-                    <div class="col-6 pl-0">
+                    <!-- <div class="col-6 pl-0">
                         <div class="payments border-bottom  paypal-payment  d-flex justify-content-center">
                             <button class="btn text-center toggle-btn paypal-btn w-100 ">Paypal</button>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                
                 <div class="card-body">
@@ -60,8 +60,20 @@
                                     <img  src="{{asset('public/images/cards.png')}}" alt="" class="w-100 cards-image">
 
                                 </div>
+                                
                             </div>
-                            <div class="row my-5 justify-content-center">
+                            <div class="row mt-4 justify-content-center">
+                                <div class="col-md-7">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="send_to_email" checked>
+                                        <label class="form-check-label" for="send_to_email">
+                                            Send photo to my email address.
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="row mb-5 mt-4 justify-content-center">
                                 <!-- <a href="#" class="btn form-control btn-primary w-30">Proceed to Pay {{@$userDetails['payment_value']}}</a> -->
                                 <button class="btn btn-primary stripe-pay-btn" style="max-width: fit-content;" type="submit">Proceed to Pay {{@$userDetails['payment_value']}}</button>
                             </div>

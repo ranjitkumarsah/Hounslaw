@@ -106,6 +106,6 @@ class AdminController extends Controller
     }
     public function exportDocType()
     {
-        return Excel::download(new docTypeExport(), 'document_types.csv');
+        return Excel::download(new docTypeExport(), 'document_types.xlsx');
     }
 }
